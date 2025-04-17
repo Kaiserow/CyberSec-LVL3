@@ -132,6 +132,51 @@ Bu modda wireless clientlar SSID'yi manuel olarak girebilir. Wireless clientlar 
 Küçük ağlarda tek bir AP olabileceği gibi büyük ağlarda da birden fazla AP bulunabilir. Bu AP'ler tek bir merkezden yönetilerek daha basit yapılandırılabilir, yönetilebilir ve izlenebilir. AP'lerin merkezi hale gelmesi için "Wireless LAN Controller (WLC)" adı verilen cihaz kullanılır. AP'ler bir WLC'ye bağlandıklarında özerk bir şekilde davranamaz, ve bu konumda "Ligtweight AP'ler" olarak adlandırılırlar. LWAP'ler sadece wireless LAN ve WLC arasında veri iletebilir. Bununla beraber, SSID tanımlama ve authentication (kimlik doğrulama) gibi tüm yönetim işlemleri AP'lerin her birinde değil, merkezi WLC'de yürütülür.
 
 
+## WLAN Security
+
+Wireless sinyaller, o kapsama alanına dahil herkesin cihazına ulaşabildiğinden ötürü çeşitli güvenlik tehditlerini de beraberinde getirir. Bunun önüne geçmek için, wireless cihazlar arasındaki veriler şifrelenmeli ve kimlik doğrulama olmadan ağ kullanılamaz olmalıdır. Bunun haricinde Rogue AP'lerin önüne geçmek için de WLC gibi merkezi yönetim teknikleri kullanılmalı ve gerekli politikalar uygulanmalıdır.
+
+Wireless cihazlarla beraber farklı ev aletleri (mikrodalga fırın, ev telefonu vs.) de çeşitli sinyaller yaydığından, aynı frekans bandını kullanan cihazlar arasında parazit oluşabilir. 2.4 GHz frekans bandını, 5 GHz bandına çekmek bir çözüm olabilir.
+
+## SSID Cloaking and MAC Address Filtering
+
+SSID Cloaking bazı AP ve wireless routerların, SSID beacon frame'leri göndermesini engeller. Böylece cihazlara SSID manuel olarak girilmediği sürece herhangi bir SSID bilgisi yayınlanmaz.
+
+#### NOT: SSID Cloaking etkinken, AP'ler veya wireless routerlar tarafından hala beacon frame'leri gönderilmeye devam eder, sadece o frame'lerin içinde SSID bilgisi yer almaz.
+
+SSID'nin yayınlanmıyor olması güvenliği arttırıyor gibi gözükse de aksine çok da kullanışlı olduğu söylenemez. SSID Cloaking etkin olmasına rağmen ağ hala tespit edilebilir durumdadır ve bu yüzden de bu yöntem günümüzde pek de bir işe yaramaz.
+
+Bununla beraber bir network admini manuel olarak çeşitli MAC adreslerine izin verirken, bazı MAC adreslerini filtreleyebilir. Böylece kablosuz ağa sadece istenilen MAC adresine sahip cihazlar dahil olması sağlanabilir. Fakat günümüzde "MAC Address Spoofing" yani sahte bir MAC adresi oluşturmak diye bir yöntem olduğundan, bu yöntem de kullanışlı değildir.
+
+Bunlar göz önünde bulundurulduğunda, wireless bir ağı korumak için daha kullanışlı yöntemlere ihtiyaç duyulur. Bunlar çeşitli authentication ve encryption sistemleridir. Çeşitli authentication yöntemlerine şöyle bir bakalım:
+
+## Open System Authentication
+
+Okul, kafe, hotel gibi public alanlarda, kablosuz ağa kolayca dahil olmak için herhangi bir kimlik doğrulama yöntemine başvurulmayabilir. Bu da çeşitli riskleri beraberinde getirdiğinden, zorunda kalmadıkça topluma açık kablosuz ağlara bağlanılmamalı, bağlanılmak zorunda kalınırsa da mutlaka iyi bir VPN tercih edilmelidir.
+
+## Shared Key Authentication
+
+Kablosuz bir istemci ile AP arasında verileri doğrulamak ve şifrelemek için WEP, WPA, WPA2 ve WPA3 gibi mekanizmalar sağlar. 
+
+### Wired Equivalent Privacy (WEP)
+
+WEP, "Rivest Cipher 4 (RC4)" encryption methodunu statik bir key ile kullanılır. Bu key, paketler değiş tokuş edildiğinde hiçbir zaman değişmez yani statiktir. Bu yüzden de kötü niyetli biri tarafından kolayca ele geçirildikten sonra yine kolayca kırılabilir. Nasıl bu kadar kolay kırılabilir olduğunu daha yakından inceleyelim:
+
+WEP’in şifreleme algoritması şu şekilde çalışır:
+
+RC4 = IV + Paylaşılan Anahtar (Shared Key)
+
+RC4 şifreleme algoritması, şifreleme için IV (Initialization Vector yani Başlatma Vektörü) ile beraber Shared Key kullanarak paket paket şifreleme yapar. 
+
+Kriptografide IV, her pakette kullanılan rastgele bir ek değer anlamına gelir. Bunun amacı, aynı anahtarla şifrelenen iki verinin farklı ciphertext (şifreli metin) üretmesini sağlamaktır. Dolayısıyla da her paketteki şifrelemenin farklı olması amaçlanır. Fakat WEP'te IV sadece 24 bittir. Bu da 2 üssü 24 = 16.777.216 tane farklı IV üretilmesi demektir. Sayı çok fazla gözükebilir fakat bu sayı özellikle de günümüz ağlarında oldukça hızlı tükenir. Bir ağda bilhassa çok fazla trafik varsa, IV'ler 1 saati bulmadan hızla tükenir. Daha sonrasında aynı IV'ler tekrardan kullanılmaya başlanır, bu da "IV reuse" olarak bilinir. Aslında özetle, kullanılan şifreleme yani IV'ler değişse bile bir yerden sonra tekrar etmeye başlar, ayrıca da bu şifreleme yötneminde kullanılan anahtar (shared key) daima sabit kalır.
+
+IV'ler tekrar başa dönüp yeniden kullanılmaya başlandığında, aynı RC4 keystream elde edilir çünkü shared key'in sabit olduğunu söylemiştik. Yani aslında bir önceki sürecin aynısı bir daha başlar. Bu sürekli tekrarlayan döngü saldırganın, IV'leri toplayarak aynı IV'lerle şifrelenmiş verilerin arasındaki benzerlikleri analiz etmesine ve bununla beraber de shared key'i ortaya çıkarmasına olanak tanır.
+
+
+
+
+
+
 
 
 
