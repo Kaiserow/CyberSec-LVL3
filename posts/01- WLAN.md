@@ -125,7 +125,11 @@ Bu modda AP; SSID'sini, desteklediği standartları ve güvenlik ayarlarını i�
 
 ## Active Mode
 
-Bu modda wireless clientlar SSID'yi manuel olarak girebilir. Wireless clientlar birden fazla kanalda, probe request frame'lerini broadcast yaparak süreci başlatır. Bu probe request, SSID'yi ve desteklenilen standartları içerir. AP'ler veya wireless routerlar bu requeste yanıt olarak; SSID'lerini, destekledikleri standartları ve güvenlik ayarlarını içeren bir "probe response" ile gönderirler. Bu mod, eğer bir AP veya wireless router beacon frame'lerini broadcast yapmayacak şekilde yapılandırılmışsa gerekli olabilir. Wireless clientlar, yakındaki WLAN'leri keşfetmek için SSID adı olmadan da bir probe request gönderebilir. Yani SSID verirsen sadece onla ilişkili AP veya wireless router'dan cevap alırsın ama SSID verilmezse o alan içerisinde kullanılabilir tüm wireless router veya AP'lerden cevap alırsın.
+Bu modda wireless clientlar SSID'yi manuel olarak girebilir. Wireless clientlar birden fazla kanalda, probe request frame'lerini broadcast yaparak süreci başlatır. Bu probe request, SSID'yi ve desteklenilen standartları içerir. AP'ler veya wireless routerlar bu requeste yanıt olarak; SSID'lerini, destekledikleri standartları ve güvenlik ayarlarını içeren bir "probe response" ile gönderirler. Bu mod, eğer bir AP veya wireless router beacon frame'lerini broadcast yapmayacak şekilde yapılandırılmışsa gerekli olabilir. Wireless clientlar, yakındaki WLAN'leri keşfetmek için SSID adı olmadan da bir probe request gönderebilir. Yani SSID verirsen sadece onunla ilişkili AP veya wireless router'dan cevap alırsın ama SSID verilmezse o alan içerisinde kullanılabilir tüm wireless router veya AP'lerden cevap alırsın.
+
+## AP, LWAP, WLC
+
+Küçük ağlarda tek bir AP olabileceği gibi büyük ağlarda da birden fazla AP bulunabilir. Bu AP'ler tek bir merkezden yönetilerek daha basit yapılandırılabilir, yönetilebilir ve izlenebilir. AP'lerin merkezi hale gelmesi için "Wireless LAN Controller (WLC)" adı verilen cihaz kullanılır. AP'ler bir WLC'ye bağlandıklarında özerk bir şekilde davranamaz, ve bu konumda "Ligtweight AP'ler" olarak adlandırılırlar. LWAP'ler sadece wireless LAN ve WLC arasında veri iletebilir. Bununla beraber, SSID tanımlama ve authentication (kimlik doğrulama) gibi tüm yönetim işlemleri AP'lerin her birinde değil, merkezi WLC'de yürütülür.
 
 
 
