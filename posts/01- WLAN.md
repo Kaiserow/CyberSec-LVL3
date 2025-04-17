@@ -173,6 +173,9 @@ Kriptografide IV, her pakette kullanılan rastgele bir ek değer anlamına gelir
 IV'ler tekrar başa dönüp yeniden kullanılmaya başlandığında, aynı RC4 keystream elde edilir çünkü shared key'in sabit olduğunu söylemiştik. Yani aslında bir önceki sürecin aynısı bir daha başlar. Bu sürekli tekrarlayan döngü saldırganın, IV'leri toplayarak aynı IV'lerle şifrelenmiş verilerin arasındaki benzerlikleri analiz etmesine ve bununla beraber de shared key'i ortaya çıkarmasına olanak tanır.
 
 
+WEP TEKRAR EDEREK BAŞLA.
+
+
 
 
 
