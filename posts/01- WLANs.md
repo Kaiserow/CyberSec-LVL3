@@ -160,7 +160,7 @@ Kablosuz bir istemci ile AP arasında verileri doğrulamak ve şifrelemek için 
 
 ### Wired Equivalent Privacy (WEP)
 
-WEP, "Rivest Cipher 4 (RC4)" encryption methodunu statik bir key ile kullanılır. Bu key, paketler değiş tokuş edildiğinde hiçbir zaman değişmez yani statiktir. Bu yüzden de kötü niyetli biri tarafından kolayca ele geçirildikten sonra yine kolayca kırılabilir. Nasıl bu kadar kolay kırılabilir olduğunu daha yakından inceleyelim:
+WEP, "Rivest Cipher 4 (RC4)" encryption methodunu statik bir key ile kullanılır. Bu key, paketler değiş tokuş edildiğinde hiçbir zaman değişmez, yani statiktir. Bu yüzden de kötü niyetli biri tarafından kolayca ele geçirildikten sonra kolayca kırılabilir. Nasıl bu kadar kolay kırılabilir olduğunu daha yakından inceleyelim:
 
 WEP’in şifreleme algoritması şu şekilde çalışır:
 
@@ -168,12 +168,69 @@ RC4 = IV + Paylaşılan Anahtar (Shared Key)
 
 RC4 şifreleme algoritması, şifreleme için IV (Initialization Vector yani Başlatma Vektörü) ile beraber Shared Key kullanarak paket paket şifreleme yapar. 
 
-Kriptografide IV, her pakette kullanılan rastgele bir ek değer anlamına gelir. Bunun amacı, aynı anahtarla şifrelenen iki verinin farklı ciphertext (şifreli metin) üretmesini sağlamaktır. Dolayısıyla da her paketteki şifrelemenin farklı olması amaçlanır. Fakat WEP'te IV sadece 24 bittir. Bu da 2 üssü 24 = 16.777.216 tane farklı IV üretilmesi demektir. Sayı çok fazla gözükebilir fakat bu sayı özellikle de günümüz ağlarında oldukça hızlı tükenir. Bir ağda bilhassa çok fazla trafik varsa, IV'ler 1 saati bulmadan hızla tükenir. Daha sonrasında aynı IV'ler tekrardan kullanılmaya başlanır, bu da "IV reuse" olarak bilinir. Aslında özetle, kullanılan şifreleme yani IV'ler değişse bile bir yerden sonra tekrar etmeye başlar, ayrıca da bu şifreleme yötneminde kullanılan anahtar (shared key) daima sabit kalır.
+Kriptografide IV, her pakette kullanılan rastgele bir ek değer anlamına gelir. Bunun amacı, aynı anahtarla şifrelenen iki verinin farklı ciphertext (şifreli metin) üretmesini sağlamaktır. Dolayısıyla da her paketteki şifrelemenin farklı olması amaçlanır. Fakat WEP'te IV sadece 24 bittir. Bu da 2 üssü 24 = 16.777.216 tane farklı IV üretilmesi demektir. Sayı çok fazla gibi gözükebilir fakat bu sayı özellikle de günümüz ağlarında oldukça hızlı tükenir. Bir ağda bilhassa çok fazla trafik varsa, IV'ler 1 saati bulmadan hızla tükenir. Daha sonrasında aynı IV'ler tekrardan kullanılmaya başlanır, bu da "IV reuse" olarak bilinir. Aslında özetle, kullanılan şifreleme yani IV'ler değişse bile bir yerden sonra tekrar etmeye başlar, ayrıca bu şifreleme yönteminde kullanılan anahtar (shared key) daima sabit kalır.
 
 IV'ler tekrar başa dönüp yeniden kullanılmaya başlandığında, aynı RC4 keystream elde edilir çünkü shared key'in sabit olduğunu söylemiştik. Yani aslında bir önceki sürecin aynısı bir daha başlar. Bu sürekli tekrarlayan döngü saldırganın, IV'leri toplayarak aynı IV'lerle şifrelenmiş verilerin arasındaki benzerlikleri analiz etmesine ve bununla beraber de shared key'i ortaya çıkarmasına olanak tanır.
 
+### Wi-Fi Protected Access (WPA)
 
-WEP TEKRAR EDEREK BAŞLA.
+WPA temel olarak RC4 kullanarak WEP ile benzeşse de "Temporal Key Integrity Protocol (TKIP)" olarak bilinen ve WEP'in aksine key'leri her paket için farklı belirleyen bir method kullanır.
+
+WPA'de anahtar artık dinamik olarak üretilir ve IV 48 bit'tir. Bu da IV reuse'u ortadan kaldırılmayı amaçlar. Bununla beraber saldırganın, IV aynı olsa bile her paket için farklı key oluşturulduğundan aynı keystream'i elde edememesi amaçlanmıştır.
+
+Fakat WPA'in zayıf bir algoritma olarak RC4 kullanması, IV daha uzun olmasına rağmen keystream'in hala daha tahmin edilebilir olması ve daha çeşitli bir çok zayıflığının keşfedilmesiyle WPA de güvensiz bir yöntem haline geldi.
+
+### Wi-Fi Protected Access v2 (WPA2)
+
+WEP ve WPA'nın aksine RC4 yerine "Advanced Encryption Standart (AES)" şifreleme algoritmasını kullanır. Aynı WPA'da olduğu gibi 4-Way Handshake mantığı ile çalışır. Çok daha güçlü şifreleme + Her bağlantıda farklı oturum anahtarı ve beraberinde daha bir çok avantaj sağlar. 
+
+Günümüzde, handshake'ler yakalanabildiğinden zayıf parolaya sahip ağlar WPA2 bile kullansalar hala risk altındadırlar. Zayıf parolalar, handshake ile yakalandıktan sonra brute force ile rahatlıkla kırılabilir.
+
+### Wi-Fi Protected Access v3 (WPA3)
+
+4-Way Handshake yerine SAE (Dragonfly Handshake) kullanılır. Offline brute force saldırısına izin vermez.
+
+#### NOT:
+
+Temporal Key Integrity Protocol (TKIP) -> Mesaj bütünlüğünden yani mesajların değiştirilmediğinden emin olmak için "Message Integrity Check (MIC)" kullanır.
+
+Advanced Encryption Standard (AES) -> "Counter Cipher Mode with Block Chaining Message Authentication Code Protocol (CCMP)" kullanır. AES-CCMP, verinin hem gizliliğini sağlar (şifreleme), hem de bütünlüğünü ve kimliğini korur. Böylece şifrelenmiş verinin değiştirilip değiştirilmediği tespit edilebilir."
+
+## Personal and Enterprise Authentication
+
+#### Personal
+
+Kişisel kimlik doğrulama kullanan ağlarda PSK (Pre-Shared Key) kullanılır. Bu, tüm kullanıcıların aynı Wi-Fi parolasını kullandığı anlamına gelir. Buna ek olarak özel bir kimlik doğrulama sürecinden geçilmez.
+
+#### Enterprise
+
+Daha sıkı güvenlik gereksinimleri olan ağlarda, kablosuz istemcilere güvenilir bir erişim sağlamak için ek bir kimlik doğrulama veya oturum açma gerekir. 
+
+Bu sistemde herkese özel ayrı bir authentication süreci yapılır. Örneğin, kullanıcı adı ve parola kişiye özel atanır ve kullanıcı onları vererek ağa bağlanabilir. Ayrıca kimlik doğrulama için, router yerine "Remote Authentication Dial-In User Service (RADIUS)" olarak adlandırılan ayrı bir server kullanılır.
+
+Enterprise security modu, Authentication, Authorization, Accounting (AAA) RADIUS server'ı gerektirir.
+
+## About Open Networks
+
+WEP, WPA ve WPA2 gibi kimlik doğrulama yöntemlerinin hiçbiri herkese açık ağlarda, kimlik doğrulamayla giriş yapılan ağların aksine herhangi bir şifreleme sağlamaz. Yani TKIP veya AES gibi şifreleme yöntemleri açık ağlarda kullanılmaz, tüm veri alışverişi şifresiz, clear text olarak iletilir. WPA3 bu yöntemlerin aksine "Opportunistic Wireless Encryption (OWE)" özelliği ile açık ağlarda bile şifreleme sağlar.
+
+#### NOT: Herkese açık ağlarda (Open Auth) WEP, WPA, WPA2 veya WPA3 zaten aktif olarak kullanılmaz yani kimlik doğrulama süreci yoktur. Buradaki ifadeler; "O ağ WPA2 destekliyor ama herhangi bir şifreleme methodunu kullanmıyor." şeklindedir.
+
+## IoT Onboarding
+
+IoT cihazları (akıllı prizler, kameralar vs.) genelde ekran, klavye vs. içermez. Bu yüzden "headless" olarak adlandırılır. Dolayısıyla da bu tür cihazlara wi-fi parolası girilemez. Bu sorunu çözmek için WPA2 dönemlerinde ilk olarak WPS (Wi-Fi Protected Setup), kolay bağlantı sağlamak için kullanılıyordu. Fakat zamanla WPS'in açıkları ortaya çıktı ve güvenli olmadığı anlaşıldı. Bu sorunu çözmek için, "DPP (Device Provisioning Protocol)" geliştirildi. Bu protokolü destekleyen cihazların üstünde QR kod şeklinde bir public key bulunur. Ağ yöneticisi bu kodu telefona okutur ve sonuç olarak cihaz ağa dahil edilir. 
+
+DPP, WPA3'ün resmi bir parçası olmasa da onunla beraber kullanılmaya başlanmış ve zamanla WPS'in yerini tamamen alacaktır.
+
+#### NOT: Onboarding, bir cihazın ya da bir kullanıcının ilk kez bir sisteme veya ağa tanıtılması, yapılandırılması ve dahil edilmesi sürecidir.
+
+
+
+
+
+
+
+
 
 
 
