@@ -30,6 +30,34 @@ SNMP manager, network management system (NMS)'in bir parçasıdır. SNMP manager
 
 # NetFlow
 
+NetFlow, Cisco tarafından geliştirilmiş, günümüzde ise birçok ağ üreticisi tarafından desteklenen bir akış tabanlı ağ izleme protokolüdür. Temel amacı, ağ cihazlarından geçen trafiği kaynak IP adresi, hedef IP adresi, protokol, kaynak ve hedef portlar, servis tipi ve iletilen veri miktarı gibi kriterlere göre akışlara (flows) ayırarak kaydetmek ve analiz edilmesini sağlamaktır. NetFlow sayesinde ağ yöneticileri, ağda kimlerin kimlerle iletişim kurduğunu, hangi uygulamaların yoğunluk oluşturduğunu, anormal trafik desenlerini ve olası güvenlik tehditlerini detaylı bir şekilde görebilir. Bu teknoloji, ağ kapasite planlaması, saldırı tespiti, faturalandırma ve performans yönetimi gibi kritik operasyonel ihtiyaçlar için kullanılır. NetFlow, trafiğin içeriğini değil, trafiğin kimlik ve yön bilgilerini toplar, bu nedenle gizlilik açısından daha güvenli kabul edilir. Zamanla NetFlow'un farklı sürümleri (V5, V9) ve açık standart hale getirilmiş versiyonu olan IPFIX geliştirilmiş, böylece daha esnek veri tipleri ve genişletilebilir formatlar desteklenmiştir. Günümüzde NetFlow, yalnızca Cisco ile sınırlı kalmayıp, Juniper'ın J-Flow'u, Huawei'nin NetStream'i gibi farklı markaların uyumlu çözümleriyle de yaygın bir şekilde kullanılmaktadır.
+
+
+# Port Mirroring
+
+Packet analyzer, (packet sniffer/traffic sniffer) NIC'e girip çıkan trafiği analiz etmeye yarayan bir yazılımdır. switch, bu giren çıkan trafiğin bir kısmını izole edebilir. Eğer switch trafiği izole ederse, packet sniffer trafiği ham olarak yakalayamaz ve dolayısıyla da düzgün bir analizden söz edilemez. Bunun önüne geçmek için kullanılan yöntem "Port Mirroring"tir.
+
+Port Mirroring (diğer adıyla SPAN - Switched Port Analyzer), bir switch üzerindeki bir porttan (veya VLAN’den) geçen trafiğin birebir kopyalanıp başka bir porta yönlendirilmesi işlemidir. Böylece trafik ham haliyle analiz edilebilir.
+
+# Syslog Servers
+
+Bir ağda belirli olaylar meydana geldiğinde, ağ aygıtlarının yöneticiye ayrıntılı sistem mesajlarıyla bildirimde bulunmak için güvenilir mekanizmaları vardır. Bu mesajlar non-critical veya significant (kayda değer) olabilir. Ağ yöneticilerinin bu mesajları depolamak, yorumlamak, görüntülemek ve ağ altyapısı üzerinde en büyük etkiye sahip olabilecek mesajlar konusunda uyarılmak için çeşitli seçenekleri vardır.
+
+Sistem mesajlarına erişmenin en yaygın yöntemi syslog adı verilen bir protokol kullanmaktır. Routerlar, switchler, application sunucuları, firewall'lar ve diğer ağ aygıtları dahil olmak üzere birçok ağ aygıtı syslog'u destekler. Syslog protokolü, ağ aygıtlarının sistem mesajlarını, ağ üzerinden syslog sunucularına göndermesine olanak tanır.
+
+# NTP (Network Time Protocol)
+
+Ağdaki tüm cihazlarda zamanı senkronize etmek önemlidir çünkü ağları yönetmenin, güvenliğini sağlamanın, sorun gidermenin ve planlamanın tüm yönleri doğru ve tutarlı zaman damgası gerektirir. Zaman, cihazlar arasında senkronize edilmediğinde, ağın farklı bölümlerinde meydana gelen olayların sırasını belirlemek imkansız olacaktır. Bu yüzden, tarihi ve zamanı ayarlamak için iki farklı method kullanılabilir:
+
+• Manual configuration of the date and time
+
+• Configuring the Network Time Protocol (NTP)
+
+Bir ağ büyüdükçe, tüm altyapı cihazlarının senkronize zamanla çalışmasını sağlamak zorlaşır. Daha küçük bir ağ ortamında bile, manuel yöntem ideal değildir. Örneğin, bir cihaz yeniden başlatılırsa, doğru bir tarih ve zaman damgası nasıl elde edilebilir?
+
+Bu yüzden de manuel yapılandırmaya daha iyi bir çözüm, ağda NTP'yi yapılandırmaktır. Bu protokol, ağdaki yönlendiricilerin zaman ayarlarını bir NTP sunucusuyla senkronize etmelerine olanak tanır.
+
+
 
 
 
